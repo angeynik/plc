@@ -1,0 +1,29 @@
+1 Создайте SSH ключ:
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+2 Скопируйте содержимое публичного ключа:
+cat ~/.ssh/id_ed25519.pub
+Добавьте SSH ключ в GitHub:
+
+3 Откройте GitHub и войдите в свой аккаунт.
+Перейдите в Settings -> SSH and GPG keys -> New SSH key.
+Вставьте скопированный публичный ключ и сохраните изменения.
+
+4 Откройте файл конфигурации SSH (config) и добавьте следующую настройку (если файла нет, создайте его):
+nano ~/.ssh/config
+Добавьте следующие строки:
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile /c/Users/tania/.ssh/tania
+    IdentitiesOnly yes
+
+5 Проверьте права доступа к файлам ключей. Убедитесь, что файлы ключей имеют правильные разрешения:
+chmod 600 /c/Users/tania/.ssh/tania
+chmod 600 /c/Users/tania/.ssh/tania.pub
+
+6 Проверьте, работает ли ваш ключ с SSH. Попробуйте выполнить следующую команду для тестирования ключа:
+ssh -i /c/Users/tania/.ssh/tania -T git@github.com
+
+7 Попробуйте снова выполнить эту команду:
+git clone git@github.com:angeynik/plc.git

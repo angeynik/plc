@@ -1,0 +1,16 @@
+IF NOT xInit THEN
+	fbAmInit(iNum:= 0 ,iSeverity:= 2 ,iProcess:= 1 ,xLatch:= FALSE ,xBuzzer:= TRUE , xLock:= TRUE );
+	fbAmInit(iNum:= 1 ,iSeverity:= 3 ,iProcess:= 2 ,xLatch:= TRUE ,xBuzzer:= TRUE , xLock:= TRUE );
+	xInit := TRUE;	
+END_IF;
+
+IF NOT (D8031 = 32760) THEN
+	aI_TempOut := SCALE( D8031 , 803 , 1740 , -500 , 1950 );
+ELSE
+	aI_TempOut := -50;
+END_IF;
+	
+fbAmSet(iNum:= 0 ,xState:= (D8031 = 32760) );
+fbAmSet(iNum:= 1 ,xState:= (X000 = 1) );
+fbAmIs(iProcessNum:= 0 ,iSeverity:= 2 ,Q:= xAlarm );
+fbAmIs(iProcessNum:= 1 ,iSeverity:= 3 ,Q:= xAlarmCritical );

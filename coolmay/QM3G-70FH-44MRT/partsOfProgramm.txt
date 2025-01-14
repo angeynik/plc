@@ -14,3 +14,30 @@ fbAmSet(iNum:= 0 ,xState:= (D8031 = 32760) );
 fbAmSet(iNum:= 1 ,xState:= (X000 = 1) );
 fbAmIs(iProcessNum:= 0 ,iSeverity:= 2 ,Q:= xAlarm );
 fbAmIs(iProcessNum:= 1 ,iSeverity:= 3 ,Q:= xAlarmCritical );
+
+
+RST( MEP( xManualWorks ) , xAutoWorks );
+RST( MEP(xAutoWorks ) ,xManualWorks  ); (* System can work only in one state Auto or Manual There is constol change*)
+
+iStep :=0; (* System step counter reset*)
+
+CASE iStep OF 
+	0: (* Initialization - first start and reset all output and set default values*)
+	dO_PumpWater := 0;
+	dO_SupplyStart :=0;
+	iStep := 10;
+	
+	10: (*Control Alarms and Mode Select axucution part *)
+	IF xSeason = 1 THEN 
+		dO_PumpWater := 1;
+		iStep := 30;
+	ELSE 
+		iStep := 50;
+	END_IF;
+	30: 
+	(* Business logic for manage system in the Winter*)
+	iStep :=10;
+	50: 
+	(* Business logic for manage system in the Summer*)
+	iStep :=10;
+	END_CASE;

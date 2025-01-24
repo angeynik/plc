@@ -1,0 +1,77 @@
+(* RST( MEP( xManualWorks ) , xAutoWorks );
+RST( MEP(xAutoWorks ) ,xManualWorks  );  *)
+(* System can work only in one state Auto or Manual There is constol change*)
+
+ 		IF xInit = 0 OR xAlarm THEN  iStep := 0 ; 
+		 	ELSE IF iStep = 20 THEN 
+	 			iStep := 20;
+ 		ELSE 
+ 			iStep := 10;
+ 		END_IF; (* Проверяем была ли выполнена инициализация xInit = 1 Ули была то переходим на шаг 10 если нет - на шаг 0 *)
+
+CASE iStep OF
+	0: (* Init  - Инициализация Задаем начальные значения переменным*)
+	IF xInit = 0  THEN 
+		dO_ExhaustDamperStart := 0;
+		dO_SupplyDamperStart := 0;
+		dO_ExhaustMotorStart := 0;
+		dO_SupplyMotorStart := 0;
+
+			IF xSeason =1 THEN
+					dO_PumpStart := 1;
+				ELSE 
+					dO_PumpStart := 0;
+			END_IF; 
+			IF MEP(xAlarm) THEN (*Проверка на наличие ошибок Если есть то переходим на шаг 100 для их отработки *)
+					iStep := 100;
+				ELSE
+					xInit := 1;
+					aO_1 := 0.0;
+					aO_2 := 0.0;
+					iStep := 10;
+			END_IF;
+	END_IF;
+
+	
+	10: (* Base *)
+	couner :=  D8013;
+	xSeason := SeasonControl( aI_TempOut , iUserTemWinter , iUserTempSummer,  xUserSeason );
+		IF MEP(xSeason) OR MEF(xSeason) THEN
+			xUserSeason :=  xSeason ;
+				IF xSeason =1 THEN
+					dO_PumpStart := 1;
+				ELSE 
+					dO_PumpStart := 0;
+				END_IF; 
+			END_IF;
+	
+	IF xUserStart = 1 THEN 
+		iStep := 20;
+		ELSE 
+		iStep := 10;
+	END_IF;
+	20: (* Manage *)
+	dO_ExhaustDamperStart := 1;
+	OUT( dO_ExhaustDamperStart , Y000 ); 
+		
+	
+	
+	100: (* Alarm *)
+		;
+	END_CASE;
+
+
+
+(*	
+D500 := D100Z1;
+
+IF MEP( M8013) AND xUserStart = TRUE  THEN
+	icountMin := icountMin +1;
+	IF icountMin =8 THEN
+		icountMin := 0;
+
+	END_IF;
+END_IF; 
+*)		
+
+		

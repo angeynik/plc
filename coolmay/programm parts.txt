@@ -74,4 +74,16 @@ IF MEP( M8013) AND xUserStart = TRUE  THEN
 END_IF; 
 *)		
 
-		
+	
+
+IF xState = TRUE  THEN 
+	IF alarm = TRUE THEN 
+		D0Z4 := SRB(D0Z4, 0, 1);
+		Q := TRUE;
+	END_IF;
+ELSE 
+	IF critical = FALSE THEN 
+		D0Z4 := SRB(D0Z4, 0, 0);
+		Q := FALSE;
+
+END_IF; 	

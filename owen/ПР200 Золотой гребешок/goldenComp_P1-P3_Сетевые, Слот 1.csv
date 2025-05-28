@@ -1,0 +1,12 @@
+﻿VariableName;VariableType;Register;Comment;MetaType;CatalogPath
+Имя переменной;Тип переменной;Адрес регистра;Комментарий;Метатип;Путь в каталоге
+netStart;Long;512;;Network;
+netSetTemp;Long;513;;Network;
+netSetSeason;Long;514;;Network;
+netTempOut;Long;515;;Network;
+netTempSupply;Long;516;;Network;
+netTempWater;Long;517;;Network;
+netAlarmCommon;Long;518;;Network;
+netAlarmFreeze;Long;519;;Network;
+netAlarmMotor;Long;520;;Network;
+netWarningFilter;Long;521;;Network;
